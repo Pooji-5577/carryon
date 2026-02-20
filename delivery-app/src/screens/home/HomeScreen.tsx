@@ -124,7 +124,7 @@ const HomeScreen: React.FC = () => {
         </View>
 
         {/* Next Button */}
-        <TouchableOpacity style={styles.nextBtn} onPress={() => navigation.navigate('Calculate' as any)}>
+        <TouchableOpacity style={styles.nextBtn} onPress={() => navigation.navigate('SelectAddress' as any)}>
           <Text style={styles.nextBtnText}>Next</Text>
         </TouchableOpacity>
 

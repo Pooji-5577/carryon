@@ -217,4 +217,8 @@ export type RootStackParamList = {
   DeliveryDetails: { orderId: string };
   SenderReceiver: undefined;
   BookingConfirmed: { bookingId?: string; paymentMethod?: string; totalAmount?: number; pickupAddress?: string; deliveryAddress?: string; vehicle?: string };
+  SelectAddress: undefined;
+  Details: undefined;
+  RequestForRide: undefined;
+  ThankYou: undefined;
 };

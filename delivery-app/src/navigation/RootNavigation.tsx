@@ -15,7 +15,7 @@ import {
 } from '../screens/auth';
 
 // Home Screens
-import { HomeScreen, LocationSearchScreen, ReadyToBookScreen } from '../screens/home';
+import { HomeScreen, LocationSearchScreen, ReadyToBookScreen, SelectAddressScreen } from '../screens/home';
 
 // Booking Screens
 import {
@@ -28,6 +28,9 @@ import {
   PaymentScreen,
   PaymentSuccessScreen,
   BookingConfirmedScreen,
+  DetailsScreen,
+  RequestForRideScreen,
+  ThankYouScreen,
 } from '../screens/booking';
 
 // Chat Screens
@@ -173,11 +176,15 @@ const AppStack: React.FC = () => {
       <Stack.Screen name="ReadyToBook" component={ReadyToBookScreen} />
       <Stack.Screen name="ActiveShipment" component={ActiveShipmentScreen} />
       <Stack.Screen name="DeliveryDetails" component={DeliveryDetailsScreen} />
+      <Stack.Screen name="SelectAddress" component={SelectAddressScreen} />
 
       {/* Booking Flow */}
       <Stack.Screen name="SenderReceiver" component={SenderReceiverScreen} />
+      <Stack.Screen name="Details" component={DetailsScreen} />
+      <Stack.Screen name="RequestForRide" component={RequestForRideScreen} />
       <Stack.Screen name="Payment" component={PaymentScreen} />
       <Stack.Screen name="PaymentSuccess" component={PaymentSuccessScreen} />
+      <Stack.Screen name="ThankYou" component={ThankYouScreen} />
       <Stack.Screen name="BookingConfirmed" component={BookingConfirmedScreen} />
     </Stack.Navigator>
   );

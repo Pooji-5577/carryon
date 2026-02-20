@@ -7,3 +7,6 @@ export { default as SenderReceiverScreen } from './SenderReceiverScreen';
 export { default as PaymentScreen } from './PaymentScreen';
 export { default as PaymentSuccessScreen } from './PaymentSuccessScreen';
 export { default as BookingConfirmedScreen } from './BookingConfirmedScreen';
+export { default as DetailsScreen } from './DetailsScreen';
+export { default as RequestForRideScreen } from './RequestForRideScreen';
+export { default as ThankYouScreen } from './ThankYouScreen';
