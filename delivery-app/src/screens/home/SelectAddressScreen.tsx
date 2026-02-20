@@ -105,6 +105,17 @@ const SelectAddressScreen: React.FC = () => {
           ))}
 
           <View style={{ height: 20 }} />
+
+          {/* Next Button */}
+          <TouchableOpacity
+            style={styles.nextButton}
+            onPress={() => navigation.navigate('Details')}
+            activeOpacity={0.85}
+          >
+            <Text style={styles.nextButtonText}>Next</Text>
+          </TouchableOpacity>
+
+          <View style={{ height: 24 }} />
         </ScrollView>
       </View>
 
@@ -163,6 +174,15 @@ const styles = StyleSheet.create({
   placeName: { fontSize: 14, fontWeight: '600', color: '#212121' },
   placeAddress: { fontSize: 12, color: '#757575', marginTop: 2, lineHeight: 16 },
   placeDistance: { fontSize: 13, fontWeight: '600', color: '#212121', marginLeft: 8 },
+  nextButton: {
+    backgroundColor: PRIMARY,
+    borderRadius: 12,
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 4,
+  },
+  nextButtonText: { fontSize: 15, fontWeight: '600', color: '#fff' },
   bottomNav: {
     flexDirection: 'row', backgroundColor: '#fff',
     borderTopWidth: 1, borderTopColor: '#E0E0E0', paddingTop: 8,

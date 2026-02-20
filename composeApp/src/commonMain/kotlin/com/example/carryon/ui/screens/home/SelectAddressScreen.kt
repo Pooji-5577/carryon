@@ -117,6 +117,16 @@ fun SelectAddressScreen(
                     Divider(color = Color(0xFFF0F0F0))
                 }
                 Spacer(modifier = Modifier.height(20.dp))
+
+                // Next Button
+                Button(
+                    onClick = onNext,
+                    modifier = Modifier.fillMaxWidth().height(50.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = PrimaryBlue)
+                ) { Text("Next", fontSize = 15.sp, fontWeight = FontWeight.SemiBold) }
+
+                Spacer(modifier = Modifier.height(24.dp))
             }
         }
     }
