@@ -260,6 +260,9 @@ fun AppNavigation(
                 onNavigateToDriverRating = {
                     navController.navigate(Screen.DriverRating.createRoute("Josh Knight"))
                 },
+                onNavigateToSettings = {
+                    navController.navigate(Screen.Profile.route)
+                },
                 onLogout = {
                     onLogout()
                     navController.navigate(Screen.Login.route) {

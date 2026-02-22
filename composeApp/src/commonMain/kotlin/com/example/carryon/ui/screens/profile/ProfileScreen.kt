@@ -46,6 +46,7 @@ fun ProfileScreen(
     onNavigateToHistory: () -> Unit,
     onNavigateToTrackShipment: () -> Unit,
     onNavigateToDriverRating: () -> Unit,
+    onNavigateToSettings: () -> Unit,
     onLogout: () -> Unit,
     onBack: () -> Unit
 ) {
@@ -87,7 +88,11 @@ fun ProfileScreen(
             )
         },
         bottomBar = {
-            BottomNavigationBar(selectedIndex = 3)
+            BottomNavigationBar(
+                selectedIndex = 3,
+                onNavigateToHistory = onNavigateToHistory,
+                onNavigateToHome = onBack
+            )
         }
     ) { paddingValues ->
         Column(
@@ -202,7 +207,7 @@ fun ProfileScreen(
             HorizontalDivider(color = Color(0xFFF0F0F0))
             ProfileMenuItem(iconRes = Res.drawable.icon_messages_menu, title = "Terms and Conditions", onClick = { })
             HorizontalDivider(color = Color(0xFFF0F0F0))
-            ProfileMenuItem(iconRes = Res.drawable.icon_settings_menu, title = "Settings", onClick = { })
+            ProfileMenuItem(iconRes = Res.drawable.icon_settings_menu, title = "Settings", onClick = onNavigateToSettings)
             HorizontalDivider(color = Color(0xFFF0F0F0))
             ProfileMenuItem(iconRes = Res.drawable.icon_people, title = "Refer Your Friend", onClick = { })
             HorizontalDivider(color = Color(0xFFF0F0F0))
@@ -264,7 +269,11 @@ private fun ProfileMenuItem(
 }
 
 @Composable
-private fun BottomNavigationBar(selectedIndex: Int) {
+private fun BottomNavigationBar(
+    selectedIndex: Int,
+    onNavigateToHistory: () -> Unit = {},
+    onNavigateToHome: () -> Unit = {}
+) {
     NavigationBar(
         containerColor = Color.White,
         tonalElevation = 8.dp
@@ -275,7 +284,7 @@ private fun BottomNavigationBar(selectedIndex: Int) {
             Pair(Res.drawable.icon_home, "Home"),
             Pair(Res.drawable.icon_profile, "Profile")
         )
-        
+
         items.forEachIndexed { index, (iconRes, label) ->
             NavigationBarItem(
                 icon = {
@@ -287,9 +296,14 @@ private fun BottomNavigationBar(selectedIndex: Int) {
                     )
                 },
                 selected = selectedIndex == index,
-                onClick = { },
+                onClick = {
+                    when (index) {
+                        1 -> onNavigateToHistory()
+                        2 -> onNavigateToHome()
+                    }
+                },
                 colors = NavigationBarItemDefaults.colors(
-                    indicatorColor = Color.Transparent
+                    indicatorColor = if (selectedIndex == index) PrimaryBlueSurface else Color.Transparent
                 )
             )
         }

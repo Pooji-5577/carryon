@@ -10,6 +10,7 @@ import com.example.carryon.ui.screens.auth.RegisterScreen
 import com.example.carryon.ui.screens.auth.OtpScreen
 import com.example.carryon.ui.screens.home.HomeScreen
 import com.example.carryon.ui.screens.profile.ProfileScreen
+import com.example.carryon.ui.screens.profile.SettingsScreen
 import com.example.carryon.ui.screens.calculate.CalculateScreen
 import com.example.carryon.ui.screens.history.HistoryScreen
 import com.example.carryon.ui.screens.tracking.TrackShipmentScreen
@@ -55,6 +56,7 @@ sealed class AppScreen {
     data object SelectAddress : AppScreen()
     data object Details : AppScreen()
     data object RequestForRide : AppScreen()
+    data object Settings : AppScreen()
 }
 
 @Composable
@@ -115,6 +117,7 @@ fun App() {
                     onNavigateToHistory = { currentScreen = AppScreen.History },
                     onNavigateToTrackShipment = { currentScreen = AppScreen.TrackShipment },
                     onNavigateToDriverRating = { currentScreen = AppScreen.DriverRating("Josh Knight") },
+                    onNavigateToSettings = { currentScreen = AppScreen.Settings },
                     onLogout = { currentScreen = AppScreen.Login },
                     onBack = { currentScreen = AppScreen.Home }
                 )
@@ -250,6 +253,11 @@ fun App() {
                 RequestForRideScreen(
                     onContinue = { currentScreen = AppScreen.PaymentSuccess("booking", 220) },
                     onBack = { currentScreen = AppScreen.Details }
+                )
+            }
+            is AppScreen.Settings -> {
+                SettingsScreen(
+                    onBack = { currentScreen = AppScreen.Profile }
                 )
             }
         }
