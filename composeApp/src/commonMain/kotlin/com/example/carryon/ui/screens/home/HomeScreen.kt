@@ -44,7 +44,8 @@ fun HomeScreen(
     onNavigateToOrders: () -> Unit,
     onNavigateToProfile: () -> Unit,
     onNavigateToTracking: (String) -> Unit,
-    onNavigateToHistory: () -> Unit = {}
+    onNavigateToHistory: () -> Unit = {},
+    onNavigateToCalculate: () -> Unit = {}
 ) {
     var pickupLocation by remember { mutableStateOf("") }
     var deliveryLocation by remember { mutableStateOf("") }
@@ -93,6 +94,7 @@ fun HomeScreen(
                                 onClick = {
                                     selectedNavItem = index
                                     when (index) {
+                                        0 -> onNavigateToCalculate()
                                         1 -> onNavigateToHistory()
                                         3 -> onNavigateToProfile()
                                     }

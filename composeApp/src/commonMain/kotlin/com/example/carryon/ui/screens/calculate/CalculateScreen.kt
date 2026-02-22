@@ -29,6 +29,10 @@ import carryon.composeapp.generated.resources.icon_profile
 import carryon.composeapp.generated.resources.icon_messages
 import carryon.composeapp.generated.resources.icon_search
 import carryon.composeapp.generated.resources.bell_icon
+import carryon.composeapp.generated.resources.calc_products
+import carryon.composeapp.generated.resources.calc_boxes
+import carryon.composeapp.generated.resources.calc_documents
+import carryon.composeapp.generated.resources.calc_map
 import org.jetbrains.compose.resources.painterResource
 import com.example.carryon.ui.theme.*
 
@@ -123,7 +127,7 @@ fun CalculateScreen(
                     shape = RoundedCornerShape(26.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = PrimaryBlue)
                 ) {
-                    Text("Book Now", fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+                    Text("Free Check", fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
                 }
                 BottomNavigationBar(selectedIndex = 2)
             }
@@ -297,7 +301,7 @@ fun CalculateScreen(
                 placeholder = { Text("Add address", color = Color.LightGray) },
                 trailingIcon = {
                     Image(
-                        painter = painterResource(Res.drawable.icon_map),
+                        painter = painterResource(Res.drawable.calc_map),
                         contentDescription = "Map",
                         modifier = Modifier.size(24.dp),
                         contentScale = ContentScale.Fit
@@ -334,7 +338,7 @@ fun CalculateScreen(
                 placeholder = { Text("Add address", color = Color.LightGray) },
                 trailingIcon = {
                     Image(
-                        painter = painterResource(Res.drawable.icon_map),
+                        painter = painterResource(Res.drawable.calc_map),
                         contentDescription = "Map",
                         modifier = Modifier.size(24.dp),
                         contentScale = ContentScale.Fit
@@ -449,10 +453,10 @@ private fun PackageTypeCard(
     modifier: Modifier = Modifier
 ) {
     val iconResource = when (packageType.name) {
-        "Products" -> Res.drawable.icon_products
-        "Boxes" -> Res.drawable.icon_boxes
-        "Documents" -> Res.drawable.icon_documents
-        else -> Res.drawable.icon_documents
+        "Products" -> Res.drawable.calc_products
+        "Boxes" -> Res.drawable.calc_boxes
+        "Documents" -> Res.drawable.calc_documents
+        else -> Res.drawable.calc_documents
     }
     
     Card(

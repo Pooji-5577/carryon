@@ -104,7 +104,8 @@ fun App() {
                     onNavigateToOrders = { currentScreen = AppScreen.Orders },
                     onNavigateToProfile = { currentScreen = AppScreen.Profile },
                     onNavigateToTracking = { currentScreen = AppScreen.ActiveShipment },
-                    onNavigateToHistory = { currentScreen = AppScreen.History }
+                    onNavigateToHistory = { currentScreen = AppScreen.History },
+                    onNavigateToCalculate = { currentScreen = AppScreen.Calculate }
                 )
             }
             is AppScreen.Profile -> {
