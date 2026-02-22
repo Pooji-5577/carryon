@@ -20,6 +20,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import carryon.composeapp.generated.resources.Res
 import carryon.composeapp.generated.resources.map_background
+import carryon.composeapp.generated.resources.location_pin
+import carryon.composeapp.generated.resources.to_pin
+import carryon.composeapp.generated.resources.ellipse_to
 import carryon.composeapp.generated.resources.icon_home
 import carryon.composeapp.generated.resources.icon_profile
 import carryon.composeapp.generated.resources.icon_messages
@@ -59,10 +62,20 @@ fun SelectAddressScreen(
             )
         },
         bottomBar = {
-            NavigationBar(containerColor = Color.White, tonalElevation = 8.dp) {
-                val items = listOf(Pair(Res.drawable.icon_search, "Search"), Pair(Res.drawable.icon_messages, "Messages"), Pair(Res.drawable.icon_home, "Home"), Pair(Res.drawable.icon_profile, "Profile"))
-                items.forEachIndexed { index, (iconRes, label) ->
-                    NavigationBarItem(icon = { Image(painter = painterResource(iconRes), contentDescription = label, modifier = Modifier.size(24.dp), contentScale = ContentScale.Fit) }, selected = selectedNavItem == index, onClick = { selectedNavItem = index }, colors = NavigationBarItemDefaults.colors(indicatorColor = if (selectedNavItem == index) PrimaryBlueSurface else Color.Transparent))
+            Surface(shadowElevation = 8.dp, color = Color.White) {
+                Column {
+                    Button(
+                        onClick = onNext,
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 10.dp).height(52.dp),
+                        shape = RoundedCornerShape(12.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = PrimaryBlue)
+                    ) { Text("Next", fontSize = 16.sp, fontWeight = FontWeight.SemiBold) }
+                    NavigationBar(containerColor = Color.White, tonalElevation = 0.dp) {
+                        val items = listOf(Pair(Res.drawable.icon_search, "Search"), Pair(Res.drawable.icon_messages, "Messages"), Pair(Res.drawable.icon_home, "Home"), Pair(Res.drawable.icon_profile, "Profile"))
+                        items.forEachIndexed { index, (iconRes, label) ->
+                            NavigationBarItem(icon = { Image(painter = painterResource(iconRes), contentDescription = label, modifier = Modifier.size(24.dp), contentScale = ContentScale.Fit) }, selected = selectedNavItem == index, onClick = { selectedNavItem = index }, colors = NavigationBarItemDefaults.colors(indicatorColor = if (selectedNavItem == index) PrimaryBlueSurface else Color.Transparent))
+                        }
+                    }
                 }
             }
         }
@@ -72,7 +85,7 @@ fun SelectAddressScreen(
             Image(
                 painter = painterResource(Res.drawable.map_background),
                 contentDescription = "Map",
-                modifier = Modifier.fillMaxWidth().height(220.dp),
+                modifier = Modifier.fillMaxWidth().height(180.dp),
                 contentScale = ContentScale.Crop
             )
 
@@ -80,22 +93,25 @@ fun SelectAddressScreen(
             Column(
                 modifier = Modifier.fillMaxWidth().offset(y = (-16).dp)
                     .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
-                    .background(Color.White).padding(horizontal = 20.dp, vertical = 12.dp)
-                    .verticalScroll(rememberScrollState())
+                    .background(Color.White)
+                    .verticalScroll(rememberScrollState()),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                Spacer(modifier = Modifier.height(10.dp))
                 // Handle bar
-                Box(modifier = Modifier.width(40.dp).height(4.dp).clip(RoundedCornerShape(2.dp)).background(Color.LightGray).align(Alignment.CenterHorizontally))
+                Box(modifier = Modifier.width(120.dp).height(4.dp).clip(RoundedCornerShape(2.dp)).background(Color(0x802F80ED)).align(Alignment.CenterHorizontally))
+                Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 12.dp)) {
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text("Select address", fontSize = 18.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // From field
-                OutlinedTextField(value = from, onValueChange = { from = it }, placeholder = { Text("Form", color = PrimaryBlue) }, leadingIcon = { Text("📍", fontSize = 16.sp) }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(10.dp), colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = PrimaryBlue, unfocusedBorderColor = PrimaryBlue), singleLine = true)
+                OutlinedTextField(value = from, onValueChange = { from = it }, placeholder = { Text("Form", color = PrimaryBlue) }, leadingIcon = { Image(painter = painterResource(Res.drawable.location_pin), contentDescription = null, modifier = Modifier.size(22.dp), contentScale = ContentScale.Fit) }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(10.dp), colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = PrimaryBlue, unfocusedBorderColor = PrimaryBlue), singleLine = true)
                 Spacer(modifier = Modifier.height(10.dp))
 
                 // To field
-                OutlinedTextField(value = to, onValueChange = { to = it }, placeholder = { Text("To", color = SuccessGreen) }, leadingIcon = { Text("○", fontSize = 16.sp, color = SuccessGreen) }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(10.dp), colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = PrimaryBlue, unfocusedBorderColor = PrimaryBlue), singleLine = true)
+                OutlinedTextField(value = to, onValueChange = { to = it }, placeholder = { Text("To", color = PrimaryBlue) }, leadingIcon = { Image(painter = painterResource(Res.drawable.ellipse_to), contentDescription = null, modifier = Modifier.size(22.dp), contentScale = ContentScale.Fit) }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(10.dp), colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = PrimaryBlue, unfocusedBorderColor = PrimaryBlue), singleLine = true)
                 Spacer(modifier = Modifier.height(20.dp))
 
                 // Recent places
@@ -106,7 +122,7 @@ fun SelectAddressScreen(
                         modifier = Modifier.fillMaxWidth().clickable { onNext() }.padding(vertical = 12.dp),
                         verticalAlignment = Alignment.Top
                     ) {
-                        Text("📍", fontSize = 16.sp, color = PrimaryBlue)
+                        Image(painter = painterResource(Res.drawable.to_pin), contentDescription = null, modifier = Modifier.size(20.dp).padding(top = 2.dp), contentScale = ContentScale.Fit)
                         Spacer(modifier = Modifier.width(12.dp))
                         Column(modifier = Modifier.weight(1f)) {
                             Text(name, fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
@@ -116,18 +132,9 @@ fun SelectAddressScreen(
                     }
                     Divider(color = Color(0xFFF0F0F0))
                 }
-                Spacer(modifier = Modifier.height(20.dp))
-
-                // Next Button
-                Button(
-                    onClick = onNext,
-                    modifier = Modifier.fillMaxWidth().height(50.dp),
-                    shape = RoundedCornerShape(12.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = PrimaryBlue)
-                ) { Text("Next", fontSize = 15.sp, fontWeight = FontWeight.SemiBold) }
-
-                Spacer(modifier = Modifier.height(24.dp))
-            }
+                Spacer(modifier = Modifier.height(8.dp))
+                } // end inner Column
+            } // end outer Column
         }
     }
 }

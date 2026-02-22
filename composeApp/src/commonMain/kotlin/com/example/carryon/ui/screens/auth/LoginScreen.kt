@@ -38,7 +38,6 @@ fun LoginScreen(
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var passwordVisible by remember { mutableStateOf(false) }
     var isLoading by remember { mutableStateOf(false) }
 
     Box(
@@ -96,15 +95,8 @@ fun LoginScreen(
                 value = password,
                 onValueChange = { password = it },
                 placeholder = { Text("Password", color = Color.LightGray) },
-                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                trailingIcon = {
-                    Text(
-                        text = if (passwordVisible) "👁" else "👁‍🗨",
-                        fontSize = 18.sp,
-                        modifier = Modifier.clickable { passwordVisible = !passwordVisible }
-                    )
-                },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),

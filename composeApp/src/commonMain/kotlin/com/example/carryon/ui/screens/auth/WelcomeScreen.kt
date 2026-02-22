@@ -2,7 +2,6 @@ package com.example.carryon.ui.screens.auth
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -16,10 +15,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import carryon.composeapp.generated.resources.Res
 import carryon.composeapp.generated.resources.welcome_truck
-import carryon.composeapp.generated.resources.icon_home
-import carryon.composeapp.generated.resources.icon_messages
-import carryon.composeapp.generated.resources.icon_profile
-import carryon.composeapp.generated.resources.icon_search
 import org.jetbrains.compose.resources.painterResource
 import com.example.carryon.ui.theme.*
 
@@ -28,77 +23,18 @@ fun WelcomeScreen(
     onCreateAccount: () -> Unit,
     onLogin: () -> Unit
 ) {
-    Scaffold(
-        topBar = {
-            // Top bar with hamburger, brand, bell
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color.White)
-                    .padding(horizontal = 16.dp, vertical = 12.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text("☰", fontSize = 22.sp, color = TextPrimary)
-                Row {
-                    Text("Carry", fontSize = 24.sp, fontWeight = FontWeight.Bold, color = PrimaryBlue)
-                    Text(" On", fontSize = 24.sp, fontWeight = FontWeight.Bold, color = PrimaryBlueDark)
-                }
-                Text("🔔", fontSize = 20.sp)
-            }
-        },
-        bottomBar = {
-            // Bottom Navigation
-            Surface(
-                shadowElevation = 8.dp,
-                color = Color.White
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp),
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    val items = listOf(
-                        Pair(Res.drawable.icon_search, "Search"),
-                        Pair(Res.drawable.icon_messages, "Messages"),
-                        Pair(Res.drawable.icon_home, "Home"),
-                        Pair(Res.drawable.icon_profile, "Profile")
-                    )
-                    items.forEachIndexed { index, (iconRes, _) ->
-                        val isActive = index == 2 // Home active
-                        Box(
-                            modifier = Modifier
-                                .size(48.dp)
-                                .background(
-                                    if (isActive) PrimaryBlueSurface else Color.Transparent,
-                                    RoundedCornerShape(12.dp)
-                                ),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Image(
-                                painter = painterResource(iconRes),
-                                contentDescription = null,
-                                modifier = Modifier.size(24.dp),
-                                contentScale = ContentScale.Fit
-                            )
-                        }
-                    }
-                }
-            }
-        },
-        containerColor = Color.White
-    ) { paddingValues ->
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
                 .padding(horizontal = 24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            Spacer(modifier = Modifier.height(20.dp))
-
             // Truck Image
             Image(
                 painter = painterResource(Res.drawable.welcome_truck),
@@ -142,7 +78,7 @@ fun WelcomeScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.height(48.dp))
 
             // Create an account Button (filled blue)
             Button(

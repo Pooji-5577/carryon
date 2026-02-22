@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
   StatusBar,
+  Image,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -36,8 +37,8 @@ const DetailsScreen: React.FC = () => {
 
       {/* Top Bar */}
       <View style={styles.topBar}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
-          <Ionicons name="chevron-back" size={22} color="#212121" />
+        <TouchableOpacity style={styles.backBtn}>
+          <Ionicons name="menu" size={26} color="#212121" />
         </TouchableOpacity>
         <Text style={styles.brandTitle}>
           <Text style={{ color: PRIMARY, fontWeight: 'bold' }}>Carry</Text>
@@ -66,7 +67,7 @@ const DetailsScreen: React.FC = () => {
 
         {/* Warning */}
         <View style={styles.warningRow}>
-          <Ionicons name="alert-circle" size={16} color="#E53935" style={{ marginRight: 6, marginTop: 2 }} />
+          <Ionicons name="help-circle" size={18} color="#E53935" style={{ marginRight: 6, marginTop: 1 }} />
           <Text style={styles.warningText}>
             Our Prohibited Items include: blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah
           </Text>
@@ -132,7 +133,13 @@ const DetailsScreen: React.FC = () => {
 
         {/* Camera box */}
         <TouchableOpacity style={styles.cameraBox} activeOpacity={0.7}>
-          <Ionicons name="camera" size={28} color={PRIMARY} style={{ marginBottom: 8 }} />
+          <View style={styles.cameraIconCircle}>
+            <Image
+              source={require('../../../assets/camera_icon.png')}
+              style={styles.cameraIconImage}
+              resizeMode="contain"
+            />
+          </View>
           <Text style={styles.cameraText}>Take a picture of the package</Text>
         </TouchableOpacity>
 
@@ -179,7 +186,8 @@ const styles = StyleSheet.create({
   fieldSub: { fontSize: 12, color: '#757575', marginBottom: 8, marginTop: -4 },
   selectBox: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-    backgroundColor: '#F5F5F5', borderRadius: 8, paddingHorizontal: 14, height: 48,
+    backgroundColor: '#F6F9FA', borderRadius: 8, paddingHorizontal: 14, height: 52,
+    borderWidth: 1, borderColor: '#DCE8E9',
   },
   selectText: { fontSize: 14, color: '#212121' },
   placeholderText: { fontSize: 14, color: '#9E9E9E' },
@@ -189,24 +197,30 @@ const styles = StyleSheet.create({
   },
   warningText: { fontSize: 12, color: '#757575', flex: 1, lineHeight: 17 },
   inputBox: {
-    backgroundColor: '#F5F5F5', borderRadius: 8, paddingHorizontal: 14, height: 48,
-    justifyContent: 'center',
+    backgroundColor: '#F6F9FA', borderRadius: 8, paddingHorizontal: 14, height: 52,
+    justifyContent: 'center', borderWidth: 1, borderColor: '#DCE8E9',
   },
   inputText: { fontSize: 14, color: '#212121' },
   radioRow: { flexDirection: 'row', alignItems: 'center', gap: 24, marginTop: 8 },
   radioItem: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   radioCircle: {
     width: 20, height: 20, borderRadius: 10, borderWidth: 2,
-    borderColor: '#43A047', alignItems: 'center', justifyContent: 'center',
+    borderColor: '#BDBDBD', alignItems: 'center', justifyContent: 'center',
   },
-  radioCircleActive: { borderColor: '#43A047' },
-  radioDot: { width: 10, height: 10, borderRadius: 5, backgroundColor: '#43A047' },
+  radioCircleActive: { borderColor: PRIMARY },
+  radioDot: { width: 10, height: 10, borderRadius: 5, backgroundColor: PRIMARY },
   radioLabel: { fontSize: 14, color: '#212121', fontWeight: '500' },
   cameraBox: {
-    borderWidth: 1.5, borderColor: '#E0E0E0', borderStyle: 'dashed',
+    borderWidth: 1, borderColor: '#DCE8E9', borderStyle: 'dashed',
     borderRadius: 10, alignItems: 'center', justifyContent: 'center',
-    paddingVertical: 20, marginTop: 18,
+    paddingVertical: 22, marginTop: 18, backgroundColor: '#F6F9FA',
   },
+  cameraIconCircle: {
+    width: 52, height: 52, borderRadius: 26,
+    backgroundColor: '#D6EAF8', alignItems: 'center', justifyContent: 'center',
+    marginBottom: 10,
+  },
+  cameraIconImage: { width: 26, height: 26 },
   cameraText: { fontSize: 13, color: '#757575' },
   continueBtn: {
     backgroundColor: PRIMARY, borderRadius: 12, height: 50,

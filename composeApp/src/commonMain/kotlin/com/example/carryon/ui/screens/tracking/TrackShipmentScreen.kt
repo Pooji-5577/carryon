@@ -24,11 +24,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import carryon.composeapp.generated.resources.Res
 import carryon.composeapp.generated.resources.carryon_logo
+import carryon.composeapp.generated.resources.icon_documents
 import carryon.composeapp.generated.resources.icon_home
 import carryon.composeapp.generated.resources.icon_profile
 import carryon.composeapp.generated.resources.icon_messages
 import carryon.composeapp.generated.resources.icon_search
 import carryon.composeapp.generated.resources.bell_icon
+import carryon.composeapp.generated.resources.track_sent
+import carryon.composeapp.generated.resources.track_transit
+import carryon.composeapp.generated.resources.track_journey
+import carryon.composeapp.generated.resources.track_accepted
+import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import com.example.carryon.ui.theme.*
 
@@ -36,7 +42,8 @@ import com.example.carryon.ui.theme.*
 @Composable
 fun TrackShipmentScreen(
     onSearch: (String) -> Unit,
-    onViewDetails: (String) -> Unit
+    onViewDetails: (String) -> Unit,
+    onNavigateToHistory: () -> Unit = {}
 ) {
     var trackingNumber by remember { mutableStateOf("") }
     
@@ -52,14 +59,13 @@ fun TrackShipmentScreen(
                             text = "Carry",
                             fontSize = 22.sp,
                             fontWeight = FontWeight.Bold,
-                            color = PrimaryBlue,
-                            fontStyle = androidx.compose.ui.text.font.FontStyle.Italic
+                            color = PrimaryBlue
                         )
                         Text(
                             text = " On",
                             fontSize = 22.sp,
                             fontWeight = FontWeight.Bold,
-                            color = TextPrimary
+                            color = PrimaryBlueDark
                         )
                     }
                 },
@@ -84,7 +90,7 @@ fun TrackShipmentScreen(
             )
         },
         bottomBar = {
-            BottomNavigationBar(selectedIndex = 2)
+            BottomNavigationBar(selectedIndex = 0, onNavigateToHistory = onNavigateToHistory)
         }
     ) { paddingValues ->
         Column(
@@ -195,7 +201,12 @@ fun TrackShipmentScreen(
                                 .background(Color.White, CircleShape),
                             contentAlignment = Alignment.Center
                         ) {
-                            Text("📦", fontSize = 18.sp)
+                            Image(
+                                painter = painterResource(Res.drawable.icon_documents),
+                                contentDescription = "Documents",
+                                modifier = Modifier.size(22.dp),
+                                contentScale = ContentScale.Fit
+                            )
                         }
                         
                         Spacer(modifier = Modifier.width(12.dp))
@@ -290,7 +301,26 @@ fun TrackShipmentScreen(
                     }
                     
                     Spacer(modifier = Modifier.height(20.dp))
-                    
+
+                    // Pagination dots
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        repeat(3) { i ->
+                            Box(
+                                modifier = Modifier
+                                    .size(if (i == 0) 8.dp else 6.dp)
+                                    .clip(CircleShape)
+                                    .background(if (i == 0) Color.White else Color.White.copy(alpha = 0.4f))
+                            )
+                            if (i < 2) Spacer(modifier = Modifier.width(6.dp))
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(14.dp))
+
                     // View Details Button
                     Button(
                         onClick = { onViewDetails("ORDB1234") },
@@ -334,17 +364,17 @@ fun TrackShipmentScreen(
             
             // Timeline Items
             TrackingTimelineItem(
-                icon = "📦",
+                iconRes = Res.drawable.track_sent,
                 title = "Sent Package",
-                location = "JnE.north Bekasi",
+                location = "JnE.north Beko时",
                 date = "22Dec,2021",
                 time = "12:30pm",
                 isCompleted = true,
                 isLast = false
             )
-            
+
             TrackingTimelineItem(
-                icon = "📊",
+                iconRes = Res.drawable.track_transit,
                 title = "Transit",
                 location = "3nE.Bandung",
                 date = "22Dec,2021",
@@ -352,9 +382,9 @@ fun TrackShipmentScreen(
                 isCompleted = true,
                 isLast = false
             )
-            
+
             TrackingTimelineItem(
-                icon = "🚚",
+                iconRes = Res.drawable.track_journey,
                 title = "On a journey",
                 location = "your destination",
                 date = "22Dec,2021",
@@ -362,9 +392,9 @@ fun TrackShipmentScreen(
                 isCompleted = true,
                 isLast = false
             )
-            
+
             TrackingTimelineItem(
-                icon = "📍",
+                iconRes = Res.drawable.track_accepted,
                 title = "Accepted",
                 location = "By Fernando",
                 date = "22Dec,2021",
@@ -380,7 +410,7 @@ fun TrackShipmentScreen(
 
 @Composable
 private fun TrackingTimelineItem(
-    icon: String,
+    iconRes: DrawableResource,
     title: String,
     location: String,
     date: String,
@@ -407,7 +437,12 @@ private fun TrackingTimelineItem(
                     ),
                 contentAlignment = Alignment.Center
             ) {
-                Text(icon, fontSize = 20.sp)
+                Image(
+                    painter = painterResource(iconRes),
+                    contentDescription = null,
+                    modifier = Modifier.size(26.dp),
+                    contentScale = ContentScale.Fit
+                )
             }
             
             // Dotted line connector
@@ -474,7 +509,7 @@ private fun TrackingTimelineItem(
 }
 
 @Composable
-private fun BottomNavigationBar(selectedIndex: Int) {
+private fun BottomNavigationBar(selectedIndex: Int, onNavigateToHistory: () -> Unit = {}) {
     NavigationBar(
         containerColor = Color.White,
         tonalElevation = 8.dp
@@ -497,7 +532,7 @@ private fun BottomNavigationBar(selectedIndex: Int) {
                     )
                 },
                 selected = selectedIndex == index,
-                onClick = { },
+                onClick = { if (index == 1) onNavigateToHistory() },
                 colors = NavigationBarItemDefaults.colors(
                     indicatorColor = Color.Transparent
                 )

@@ -15,11 +15,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import carryon.composeapp.generated.resources.Res
-import carryon.composeapp.generated.resources.carryon_logo
+import carryon.composeapp.generated.resources.ellipse_4
 import carryon.composeapp.generated.resources.icon_home
 import carryon.composeapp.generated.resources.icon_profile
 import carryon.composeapp.generated.resources.icon_messages
@@ -51,17 +52,11 @@ fun ProfileScreen(
                         horizontalArrangement = Arrangement.Center
                     ) {
                         Text(
-                            text = "Carry",
+                            text = "Carry On",
                             fontSize = 22.sp,
                             fontWeight = FontWeight.Bold,
                             color = PrimaryBlue,
-                            fontStyle = androidx.compose.ui.text.font.FontStyle.Italic
-                        )
-                        Text(
-                            text = " On",
-                            fontSize = 22.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = TextPrimary
+                            fontStyle = FontStyle.Italic
                         )
                     }
                 },
@@ -97,8 +92,8 @@ fun ProfileScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 20.dp)
         ) {
-            Spacer(modifier = Modifier.height(16.dp))
-            
+            Spacer(modifier = Modifier.height(24.dp))
+
             // Profile Header
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -114,146 +109,111 @@ fun ProfileScreen(
                     Text(
                         text = "Devansh Chauhan",
                         fontSize = 18.sp,
-                        color = TextPrimary
+                        color = TextSecondary
                     )
                 }
-                
-                // Profile Avatar - using app logo as placeholder
+
+                // Circular Avatar
                 Box(
                     modifier = Modifier
-                        .size(70.dp)
+                        .size(68.dp)
                         .clip(CircleShape)
-                        .background(PrimaryBlue)
+                        .background(Color(0xFFE3F2FD))
                 ) {
                     Image(
-                        painter = painterResource(Res.drawable.carryon_logo),
+                        painter = painterResource(Res.drawable.ellipse_4),
                         contentDescription = "Profile",
                         modifier = Modifier.fillMaxSize(),
                         contentScale = ContentScale.Crop
                     )
                 }
             }
-            
-            Spacer(modifier = Modifier.height(24.dp))
-            
-            // Action Buttons Row
+
+            Spacer(modifier = Modifier.height(28.dp))
+
+            // Cards Row
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                ActionButton(
-                    text = "Help",
-                    modifier = Modifier.weight(1f),
-                    onClick = onNavigateToHelp
-                )
-                ActionButton(
-                    text = "Wallet",
-                    modifier = Modifier.weight(1f),
-                    onClick = { }
-                )
-                ActionButton(
-                    text = "Trips",
-                    modifier = Modifier.weight(1f),
-                    onClick = onNavigateToOrders
-                )
+                // Saved Addresses Card
+                Card(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(100.dp)
+                        .clickable { onNavigateToSavedAddresses() },
+                    shape = RoundedCornerShape(12.dp),
+                    colors = CardDefaults.cardColors(containerColor = PrimaryBlue)
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Text(text = "📍", fontSize = 22.sp)
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = "Saved\nAddresses",
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color.White
+                        )
+                    }
+                }
+
+                // Rewards Card
+                Card(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(100.dp)
+                        .clickable { },
+                    shape = RoundedCornerShape(12.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color(0xFFFFC107))
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Text(text = "🏆", fontSize = 22.sp)
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = "Rewards",
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color.White
+                        )
+                    }
+                }
             }
-            
-            Spacer(modifier = Modifier.height(40.dp))
-            
-            // Menu Options
-            MenuOption(
-                icon = "🧮",
-                title = "Calculate Shipping",
-                onClick = onNavigateToCalculate
-            )
-            
-            Spacer(modifier = Modifier.height(24.dp))
-            
-            MenuOption(
-                icon = "📜",
-                title = "Order History",
-                onClick = onNavigateToHistory
-            )
-            
-            Spacer(modifier = Modifier.height(24.dp))
-            
-            MenuOption(
-                icon = "📍",
-                title = "Track Shipment",
-                onClick = onNavigateToTrackShipment
-            )
-            
-            Spacer(modifier = Modifier.height(24.dp))
-            
-            MenuOption(
-                icon = "⭐",
-                title = "Rate Driver",
-                onClick = onNavigateToDriverRating
-            )
-            
-            Spacer(modifier = Modifier.height(24.dp))
-            
-            MenuOption(
-                icon = "🏷️",
-                title = "Apply Promo Code",
-                onClick = { }
-            )
-            
-            Spacer(modifier = Modifier.height(24.dp))
-            
-            MenuOption(
-                icon = "⚙️",
-                title = "Settings",
-                onClick = { }
-            )
-            
-            Spacer(modifier = Modifier.height(24.dp))
-            
-            MenuOption(
-                icon = "👥",
-                title = "Help and support",
-                onClick = onNavigateToHelp
-            )
-            
-            Spacer(modifier = Modifier.height(24.dp))
-            
-            // Logout
-            MenuOption(
-                icon = "🚪",
+
+            Spacer(modifier = Modifier.height(28.dp))
+
+            // Menu Items
+            ProfileMenuItem(icon = "❓", title = "Help & Support", onClick = onNavigateToHelp)
+            HorizontalDivider(color = Color(0xFFF0F0F0))
+            ProfileMenuItem(icon = "💬", title = "Terms and Conditions", onClick = { })
+            HorizontalDivider(color = Color(0xFFF0F0F0))
+            ProfileMenuItem(icon = "⚙️", title = "Settings", onClick = { })
+            HorizontalDivider(color = Color(0xFFF0F0F0))
+            ProfileMenuItem(icon = "👤", title = "Refer Your Friend", onClick = { })
+            HorizontalDivider(color = Color(0xFFF0F0F0))
+            ProfileMenuItem(
+                icon = "🔐",
                 title = "Logout",
-                titleColor = PrimaryBlue,
+                titleColor = Color(0xFFE53935),
                 onClick = onLogout
             )
-            
+
             Spacer(modifier = Modifier.height(32.dp))
         }
     }
 }
 
 @Composable
-private fun ActionButton(
-    text: String,
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit
-) {
-    Button(
-        onClick = onClick,
-        modifier = modifier.height(48.dp),
-        shape = RoundedCornerShape(12.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = PrimaryBlue
-        )
-    ) {
-        Text(
-            text = text,
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Medium
-        )
-    }
-}
-
-@Composable
-private fun MenuOption(
+private fun ProfileMenuItem(
     icon: String,
     title: String,
     titleColor: Color = TextPrimary,
@@ -262,28 +222,34 @@ private fun MenuOption(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onClick() },
+            .clickable { onClick() }
+            .padding(vertical = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(icon, fontSize = 24.sp)
-        
+        Box(
+            modifier = Modifier
+                .size(36.dp)
+                .background(Color(0xFFF5F5F5), CircleShape),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(icon, fontSize = 18.sp)
+        }
+
         Spacer(modifier = Modifier.width(16.dp))
-        
+
         Text(
             text = title,
             fontSize = 16.sp,
             color = titleColor,
             modifier = Modifier.weight(1f)
         )
-        
-        Box(
-            modifier = Modifier
-                .size(36.dp)
-                .background(Color(0xFFF0F0F0), CircleShape),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(">", fontSize = 16.sp, color = TextSecondary)
-        }
+
+        Text(
+            text = ">",
+            fontSize = 18.sp,
+            color = Color(0xFFBDBDBD),
+            fontWeight = FontWeight.Light
+        )
     }
 }
 

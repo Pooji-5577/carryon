@@ -24,6 +24,8 @@ import carryon.composeapp.generated.resources.icon_profile
 import carryon.composeapp.generated.resources.icon_messages
 import carryon.composeapp.generated.resources.icon_search
 import carryon.composeapp.generated.resources.bell_icon
+import carryon.composeapp.generated.resources.icon_spark
+import carryon.composeapp.generated.resources.icon_timer
 import org.jetbrains.compose.resources.painterResource
 import com.example.carryon.ui.theme.*
 
@@ -41,7 +43,9 @@ fun HistoryScreen(
     onInstantDelivery: () -> Unit,
     onScheduleDelivery: () -> Unit,
     onOrderClick: (String) -> Unit,
-    onViewAll: () -> Unit
+    onViewAll: () -> Unit,
+    onNavigateToHome: () -> Unit = {},
+    onNavigateToProfile: () -> Unit = {}
 ) {
     val orderHistory = remember {
         listOf(
@@ -62,14 +66,13 @@ fun HistoryScreen(
                             text = "Carry",
                             fontSize = 22.sp,
                             fontWeight = FontWeight.Bold,
-                            color = PrimaryBlue,
-                            fontStyle = androidx.compose.ui.text.font.FontStyle.Italic
+                            color = PrimaryBlue
                         )
                         Text(
                             text = " On",
                             fontSize = 22.sp,
                             fontWeight = FontWeight.Bold,
-                            color = TextPrimary
+                            color = PrimaryBlueDark
                         )
                     }
                 },
@@ -94,7 +97,11 @@ fun HistoryScreen(
             )
         },
         bottomBar = {
-            BottomNavigationBar(selectedIndex = 2)
+            BottomNavigationBar(
+                selectedIndex = 1,
+                onNavigateToHome = onNavigateToHome,
+                onNavigateToProfile = onNavigateToProfile
+            )
         }
     ) { paddingValues ->
         Column(
@@ -189,7 +196,7 @@ fun HistoryScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable { onInstantDelivery() },
-                shape = RoundedCornerShape(16.dp),
+                shape = RoundedCornerShape(4.dp),
                 colors = CardDefaults.cardColors(containerColor = PrimaryBlue),
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
             ) {
@@ -197,7 +204,7 @@ fun HistoryScreen(
                     Column(
                         modifier = Modifier.padding(20.dp)
                     ) {
-                        Text("⚡", fontSize = 24.sp)
+                        Image(painter = painterResource(Res.drawable.icon_spark), contentDescription = null, modifier = Modifier.size(28.dp), contentScale = ContentScale.Fit)
                         
                         Spacer(modifier = Modifier.height(8.dp))
                         
@@ -215,14 +222,13 @@ fun HistoryScreen(
                         )
                     }
                     
-                    // Background bike icon
-                    Text(
-                        text = "🏍️",
-                        fontSize = 60.sp,
-                        modifier = Modifier
-                            .align(Alignment.CenterEnd)
-                            .padding(end = 16.dp),
-                        color = Color.White.copy(alpha = 0.3f)
+                    // Background spark icon
+                    Image(
+                        painter = painterResource(Res.drawable.icon_spark),
+                        contentDescription = null,
+                        modifier = Modifier.size(80.dp).align(Alignment.CenterEnd).padding(end = 16.dp),
+                        alpha = 0.2f,
+                        contentScale = ContentScale.Fit
                     )
                 }
             }
@@ -234,7 +240,7 @@ fun HistoryScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable { onScheduleDelivery() },
-                shape = RoundedCornerShape(16.dp),
+                shape = RoundedCornerShape(4.dp),
                 colors = CardDefaults.cardColors(containerColor = Color(0xFFF8F9FA)),
                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
@@ -242,7 +248,7 @@ fun HistoryScreen(
                     Column(
                         modifier = Modifier.padding(20.dp)
                     ) {
-                        Text("⏰", fontSize = 24.sp)
+                        Image(painter = painterResource(Res.drawable.icon_timer), contentDescription = null, modifier = Modifier.size(28.dp), contentScale = ContentScale.Fit)
                         
                         Spacer(modifier = Modifier.height(8.dp))
                         
@@ -260,14 +266,13 @@ fun HistoryScreen(
                         )
                     }
                     
-                    // Background clock icon
-                    Text(
-                        text = "🕐",
-                        fontSize = 60.sp,
-                        modifier = Modifier
-                            .align(Alignment.CenterEnd)
-                            .padding(end = 16.dp),
-                        color = Color.LightGray.copy(alpha = 0.5f)
+                    // Background timer icon
+                    Image(
+                        painter = painterResource(Res.drawable.icon_timer),
+                        contentDescription = null,
+                        modifier = Modifier.size(80.dp).align(Alignment.CenterEnd).padding(end = 16.dp),
+                        alpha = 0.15f,
+                        contentScale = ContentScale.Fit
                     )
                 }
             }
@@ -397,7 +402,11 @@ private fun HistoryItem(
 }
 
 @Composable
-private fun BottomNavigationBar(selectedIndex: Int) {
+private fun BottomNavigationBar(
+    selectedIndex: Int,
+    onNavigateToHome: () -> Unit = {},
+    onNavigateToProfile: () -> Unit = {}
+) {
     NavigationBar(
         containerColor = Color.White,
         tonalElevation = 8.dp
@@ -420,9 +429,14 @@ private fun BottomNavigationBar(selectedIndex: Int) {
                     )
                 },
                 selected = selectedIndex == index,
-                onClick = { },
+                onClick = {
+                    when (index) {
+                        2 -> onNavigateToHome()
+                        3 -> onNavigateToProfile()
+                    }
+                },
                 colors = NavigationBarItemDefaults.colors(
-                    indicatorColor = Color.Transparent
+                    indicatorColor = if (selectedIndex == index) PrimaryBlueSurface else Color.Transparent
                 )
             )
         }

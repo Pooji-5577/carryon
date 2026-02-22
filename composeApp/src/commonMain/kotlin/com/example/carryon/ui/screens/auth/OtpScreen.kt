@@ -106,7 +106,7 @@ fun OtpScreen(
                     }
                 },
                 keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.NumberPassword
+                    keyboardType = KeyboardType.Text
                 ),
                 decorationBox = {
                     Row(
@@ -127,11 +127,18 @@ fun OtpScreen(
                                             errorMessage != null -> Color.Red
                                             isFocused -> PrimaryBlue
                                             char != null -> PrimaryBlue
-                                            else -> Color(0xFFE0E0E0)
+                                            else -> Color(0xFFBDBDBD)
                                         },
                                         shape = RoundedCornerShape(12.dp)
                                     )
-                                    .background(Color.White, RoundedCornerShape(12.dp)),
+                                    .background(
+                                        color = when {
+                                            errorMessage != null -> Color(0xFFFFF0F0)
+                                            char != null -> Color(0x332F80ED)
+                                            else -> Color.White
+                                        },
+                                        shape = RoundedCornerShape(12.dp)
+                                    ),
                                 contentAlignment = Alignment.Center
                             ) {
                                 Text(

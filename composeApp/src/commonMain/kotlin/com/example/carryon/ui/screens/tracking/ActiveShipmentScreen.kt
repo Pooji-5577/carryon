@@ -33,7 +33,8 @@ import com.example.carryon.ui.theme.*
 @Composable
 fun ActiveShipmentScreen(
     onTrackShipments: () -> Unit,
-    onNavigateToHome: () -> Unit
+    onNavigateToHome: () -> Unit,
+    onNavigateToHistory: () -> Unit = {}
 ) {
     var shareWithNeighbors by remember { mutableStateOf(true) }
 
@@ -81,7 +82,10 @@ fun ActiveShipmentScreen(
             )
         },
         bottomBar = {
-            ActiveShipmentBottomNav(onNavigateToHome = onNavigateToHome)
+            ActiveShipmentBottomNav(
+                onNavigateToHome = onNavigateToHome,
+                onNavigateToHistory = onNavigateToHistory
+            )
         },
         containerColor = Color.White
     ) { paddingValues ->
@@ -261,7 +265,10 @@ fun ActiveShipmentScreen(
 }
 
 @Composable
-private fun ActiveShipmentBottomNav(onNavigateToHome: () -> Unit) {
+private fun ActiveShipmentBottomNav(
+    onNavigateToHome: () -> Unit,
+    onNavigateToHistory: () -> Unit = {}
+) {
     NavigationBar(
         containerColor = Color.White,
         tonalElevation = 8.dp
@@ -285,7 +292,10 @@ private fun ActiveShipmentBottomNav(onNavigateToHome: () -> Unit) {
                 },
                 selected = index == 2,
                 onClick = {
-                    if (index == 2) onNavigateToHome()
+                    when (index) {
+                        1 -> onNavigateToHistory()
+                        2 -> onNavigateToHome()
+                    }
                 },
                 colors = NavigationBarItemDefaults.colors(
                     indicatorColor = if (index == 2) PrimaryBlueSurface else Color.Transparent

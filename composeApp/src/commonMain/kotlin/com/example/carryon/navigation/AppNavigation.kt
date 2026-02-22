@@ -13,6 +13,7 @@ import com.example.carryon.ui.screens.home.HomeScreen
 import com.example.carryon.ui.screens.booking.BookingScreen
 import com.example.carryon.ui.screens.tracking.TrackingScreen
 import com.example.carryon.ui.screens.tracking.TrackShipmentScreen
+import com.example.carryon.ui.screens.tracking.TrackingLiveScreen
 import com.example.carryon.ui.screens.tracking.PackageDetailsScreen
 import com.example.carryon.ui.screens.orders.OrdersScreen
 import com.example.carryon.ui.screens.orders.OrderDetailScreen
@@ -29,7 +30,6 @@ import com.example.carryon.ui.screens.tracking.DeliveryDetailsScreen
 import com.example.carryon.ui.screens.booking.SenderReceiverScreen
 import com.example.carryon.ui.screens.booking.PaymentScreen
 import com.example.carryon.ui.screens.booking.PaymentSuccessScreen
-import com.example.carryon.ui.screens.booking.BookingConfirmedScreen
 
 sealed class Screen(val route: String) {
     // Splash
@@ -58,6 +58,7 @@ sealed class Screen(val route: String) {
     data object Calculate : Screen("calculate")
     data object History : Screen("history")
     data object TrackShipment : Screen("track-shipment")
+    data object TrackingLive : Screen("tracking-live")
     data object PackageDetails : Screen("package-details/{trackingNumber}") {
         fun createRoute(trackingNumber: String) = "package-details/$trackingNumber"
     }
@@ -81,9 +82,6 @@ sealed class Screen(val route: String) {
     }
     data object PaymentSuccessNav : Screen("payment-success/{bookingId}/{amount}") {
         fun createRoute(bookingId: String, amount: Int = 220) = "payment-success/$bookingId/$amount"
-    }
-    data object BookingConfirmed : Screen("booking-confirmed/{bookingId}") {
-        fun createRoute(bookingId: String) = "booking-confirmed/$bookingId"
     }
 
     // Orders
@@ -181,6 +179,9 @@ fun AppNavigation(
                 },
                 onNavigateToTracking = { bookingId ->
                     navController.navigate(Screen.Tracking.createRoute(bookingId))
+                },
+                onNavigateToHistory = {
+                    navController.navigate(Screen.History.route)
                 }
             )
         }
@@ -315,9 +316,19 @@ fun AppNavigation(
                 onSearch = { trackingNumber ->
                     navController.navigate(Screen.PackageDetails.createRoute(trackingNumber))
                 },
-                onViewDetails = { trackingNumber ->
-                    navController.navigate(Screen.PackageDetails.createRoute(trackingNumber))
+                onViewDetails = { _ ->
+                    navController.navigate(Screen.TrackingLive.route)
+                },
+                onNavigateToHistory = {
+                    navController.navigate(Screen.History.route)
                 }
+            )
+        }
+
+        // Tracking Live Screen
+        composable(Screen.TrackingLive.route) {
+            TrackingLiveScreen(
+                onBack = { navController.popBackStack() }
             )
         }
         
@@ -362,12 +373,15 @@ fun AppNavigation(
         composable(Screen.ActiveShipment.route) {
             ActiveShipmentScreen(
                 onTrackShipments = {
-                    navController.navigate(Screen.DeliveryDetails.createRoute("560023"))
+                    navController.navigate(Screen.TrackShipment.route)
                 },
                 onNavigateToHome = {
                     navController.navigate(Screen.Home.route) {
                         popUpTo(Screen.Home.route) { inclusive = true }
                     }
+                },
+                onNavigateToHistory = {
+                    navController.navigate(Screen.History.route)
                 }
             )
         }
@@ -418,29 +432,12 @@ fun AppNavigation(
             PaymentSuccessScreen(
                 amount = amount,
                 onContinue = {
-                    navController.navigate(Screen.BookingConfirmed.createRoute(bookingId)) {
-                        popUpTo(Screen.Booking.route) { inclusive = true }
+                    navController.navigate(Screen.ActiveShipment.route) {
+                        popUpTo(Screen.Home.route)
                     }
                 }
             )
         }
 
-        // Booking Confirmed Screen
-        composable(Screen.BookingConfirmed.route) { backStackEntry ->
-            val bookingId = backStackEntry.arguments?.getString("bookingId") ?: ""
-            BookingConfirmedScreen(
-                bookingId = bookingId,
-                onTrackOrder = {
-                    navController.navigate(Screen.ActiveShipment.route) {
-                        popUpTo(Screen.Home.route)
-                    }
-                },
-                onGoHome = {
-                    navController.navigate(Screen.Home.route) {
-                        popUpTo(Screen.Home.route) { inclusive = true }
-                    }
-                }
-            )
-        }
     }
 }

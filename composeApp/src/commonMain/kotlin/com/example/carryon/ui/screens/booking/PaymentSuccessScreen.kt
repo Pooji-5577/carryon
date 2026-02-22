@@ -1,5 +1,6 @@
 package com.example.carryon.ui.screens.booking
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -9,10 +10,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import carryon.composeapp.generated.resources.Res
+import carryon.composeapp.generated.resources.thankyou_icon
+import org.jetbrains.compose.resources.painterResource
 import com.example.carryon.ui.theme.*
 
 @Composable
@@ -29,22 +34,13 @@ fun PaymentSuccessScreen(
     ) {
         Spacer(modifier = Modifier.weight(1f))
 
-        // ── SUCCESS CIRCLE ──
-        Box(
-            modifier = Modifier
-                .size(140.dp)
-                .background(PrimaryBlueSurface, CircleShape),
-            contentAlignment = Alignment.Center
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(100.dp)
-                    .background(PrimaryBlue, CircleShape),
-                contentAlignment = Alignment.Center
-            ) {
-                Text("✓", fontSize = 48.sp, color = Color.White, fontWeight = FontWeight.Bold)
-            }
-        }
+        // ── SUCCESS ICON ──
+        Image(
+            painter = painterResource(Res.drawable.thankyou_icon),
+            contentDescription = "Success",
+            modifier = Modifier.size(160.dp),
+            contentScale = ContentScale.Fit
+        )
 
         Spacer(modifier = Modifier.height(32.dp))
 

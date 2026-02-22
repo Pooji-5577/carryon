@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
   StatusBar,
+  Image,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -20,10 +21,30 @@ const PRIMARY_DARK = '#1565C0';
 const PRIMARY_SURFACE = '#E3F2FD';
 
 const PAYMENT_METHODS = [
-  { id: 'visa', label: '**** **** **** 8970', sub: 'Expires 12/26', icon: 'VISA', iconBg: '#000' },
-  { id: 'mastercard', label: '**** **** **** 8970', sub: 'Expires 12/26', icon: 'MC', iconBg: '#EB001B' },
-  { id: 'paypal', label: 'mailaddress@mail.com', sub: 'Expires 12/26', icon: 'PP', iconBg: '#003087' },
-  { id: 'cash', label: 'Cash', sub: '', icon: '$', iconBg: '#1A1A1A' },
+  {
+    id: 'visa',
+    label: '**** **** **** 8970',
+    sub: 'Expires: 12/26',
+    icon: require('../../../assets/payment_visa.png'),
+  },
+  {
+    id: 'mastercard',
+    label: '**** **** **** 8970',
+    sub: 'Expires: 12/26',
+    icon: require('../../../assets/payment_mastercard.png'),
+  },
+  {
+    id: 'paypal',
+    label: 'mailaddress@mail.com',
+    sub: 'Expires: 12/26',
+    icon: require('../../../assets/payment_paypal.png'),
+  },
+  {
+    id: 'cash',
+    label: 'Cash',
+    sub: '',
+    icon: require('../../../assets/payment_cash.png'),
+  },
 ];
 
 const RequestForRideScreen: React.FC = () => {
@@ -59,15 +80,21 @@ const RequestForRideScreen: React.FC = () => {
         {/* Route */}
         <View style={styles.routeCard}>
           <View style={styles.routeRow}>
-            <Ionicons name="location" size={20} color="#E53935" style={{ marginTop: 2 }} />
+            <Ionicons name="location" size={22} color="#E53935" style={{ marginTop: 2 }} />
             <View style={{ marginLeft: 12, flex: 1 }}>
               <Text style={styles.routeLabel}>Current location</Text>
               <Text style={styles.routeAddress}>2972 Westheimer Rd. Santa Ana, Illinois 85486</Text>
             </View>
           </View>
-          <View style={styles.routeDivider} />
+          {/* Dashed connector */}
+          <View style={{ flexDirection: 'row' }}>
+            <View style={{ width: 22, alignItems: 'center' }}>
+              <View style={styles.dashedLine} />
+            </View>
+            <View style={{ flex: 1 }} />
+          </View>
           <View style={styles.routeRow}>
-            <Ionicons name="location" size={20} color="#43A047" style={{ marginTop: 2 }} />
+            <Ionicons name="location" size={22} color="#43A047" style={{ marginTop: 2 }} />
             <View style={{ marginLeft: 12, flex: 1 }}>
               <Text style={styles.routeLabel}>Office</Text>
               <Text style={styles.routeAddress}>1901 Thornridge Cir. Shiloh, Hawaii 81063</Text>
@@ -85,9 +112,11 @@ const RequestForRideScreen: React.FC = () => {
               <Text style={styles.ratingText}>4.9 (531 reviews)</Text>
             </View>
           </View>
-          <View style={styles.carImagePlaceholder}>
-            <Text style={{ fontSize: 36 }}>🚗</Text>
-          </View>
+          <Image
+            source={require('../../../assets/car_mustang.png')}
+            style={styles.carImage}
+            resizeMode="contain"
+          />
         </View>
 
         {/* Charge */}
@@ -110,16 +139,11 @@ const RequestForRideScreen: React.FC = () => {
             onPress={() => setSelectedPayment(method.id)}
             activeOpacity={0.75}
           >
-            <View style={[styles.paymentIcon, { backgroundColor: method.iconBg }]}>
-              <Text style={styles.paymentIconText}>{method.icon}</Text>
-            </View>
+            <Image source={method.icon} style={styles.paymentIcon} resizeMode="contain" />
             <View style={{ marginLeft: 14, flex: 1 }}>
               <Text style={styles.paymentLabel}>{method.label}</Text>
               {method.sub ? <Text style={styles.paymentSub}>{method.sub}</Text> : null}
             </View>
-            {selectedPayment === method.id && (
-              <Ionicons name="checkmark-circle" size={20} color={PRIMARY} />
-            )}
           </TouchableOpacity>
         ))}
 
@@ -163,37 +187,39 @@ const styles = StyleSheet.create({
   pageTitle: { fontSize: 18, fontWeight: '600', color: '#212121', marginLeft: 8 },
   routeCard: { backgroundColor: '#fff', marginBottom: 16 },
   routeRow: { flexDirection: 'row', alignItems: 'flex-start', paddingVertical: 4 },
-  routeDivider: {
-    width: 2, height: 20, backgroundColor: '#E0E0E0',
-    marginLeft: 9, borderStyle: 'dashed', marginVertical: 4,
+  dashedLine: {
+    width: 2,
+    height: 18,
+    marginVertical: 2,
+    borderStyle: 'dashed',
+    borderLeftWidth: 2,
+    borderColor: '#9E9E9E',
   },
   routeLabel: { fontSize: 14, fontWeight: '600', color: '#212121' },
   routeAddress: { fontSize: 12, color: '#757575', marginTop: 2, lineHeight: 17 },
   routeDistance: { fontSize: 13, fontWeight: '600', color: '#212121', alignSelf: 'flex-start', marginTop: 2 },
   carCard: {
     flexDirection: 'row', alignItems: 'center',
-    borderWidth: 1, borderColor: '#E0E0E0', borderRadius: 12,
+    borderWidth: 1, borderColor: '#DCE8E9', borderRadius: 12,
+    backgroundColor: '#F6F9FA',
     padding: 14, marginBottom: 20,
   },
   carName: { fontSize: 16, fontWeight: '700', color: '#212121', marginBottom: 6 },
   ratingRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   ratingText: { fontSize: 13, color: '#757575' },
-  carImagePlaceholder: { alignItems: 'center', justifyContent: 'center' },
+  carImage: { width: 110, height: 70 },
   sectionTitle: { fontSize: 15, fontWeight: '600', color: '#212121', marginBottom: 10 },
   chargeRow: { flexDirection: 'row', justifyContent: 'space-between' },
   chargeLabel: { fontSize: 14, color: '#757575' },
   chargeValue: { fontSize: 14, fontWeight: '600', color: '#212121' },
   paymentCard: {
     flexDirection: 'row', alignItems: 'center',
-    borderWidth: 1, borderColor: '#E0E0E0', borderRadius: 10,
-    padding: 12, marginBottom: 10,
+    borderWidth: 1, borderColor: '#DCE8E9', borderRadius: 10,
+    backgroundColor: '#F6F9FA',
+    padding: 14, marginBottom: 10,
   },
   paymentCardActive: { borderColor: PRIMARY, backgroundColor: PRIMARY_SURFACE },
-  paymentIcon: {
-    width: 44, height: 30, borderRadius: 4,
-    alignItems: 'center', justifyContent: 'center',
-  },
-  paymentIconText: { color: '#fff', fontSize: 11, fontWeight: '800' },
+  paymentIcon: { width: 52, height: 36 },
   paymentLabel: { fontSize: 14, fontWeight: '500', color: '#212121' },
   paymentSub: { fontSize: 12, color: '#757575', marginTop: 2 },
   continueBtn: {

@@ -13,6 +13,7 @@ import com.example.carryon.ui.screens.profile.ProfileScreen
 import com.example.carryon.ui.screens.calculate.CalculateScreen
 import com.example.carryon.ui.screens.history.HistoryScreen
 import com.example.carryon.ui.screens.tracking.TrackShipmentScreen
+import com.example.carryon.ui.screens.tracking.TrackingLiveScreen
 import com.example.carryon.ui.screens.tracking.PackageDetailsScreen
 import com.example.carryon.ui.screens.orders.OrdersScreen
 import com.example.carryon.ui.screens.booking.BookingScreen
@@ -23,11 +24,9 @@ import com.example.carryon.ui.screens.tracking.DeliveryDetailsScreen
 import com.example.carryon.ui.screens.booking.SenderReceiverScreen
 import com.example.carryon.ui.screens.booking.PaymentScreen
 import com.example.carryon.ui.screens.booking.PaymentSuccessScreen
-import com.example.carryon.ui.screens.booking.BookingConfirmedScreen
 import com.example.carryon.ui.screens.home.SelectAddressScreen
 import com.example.carryon.ui.screens.booking.DetailsScreen
 import com.example.carryon.ui.screens.booking.RequestForRideScreen
-import com.example.carryon.ui.screens.booking.ThankYouScreen
 
 // Simple screen state for iOS compatibility
 sealed class AppScreen {
@@ -41,6 +40,7 @@ sealed class AppScreen {
     data object Calculate : AppScreen()
     data object History : AppScreen()
     data object TrackShipment : AppScreen()
+    data object TrackingLive : AppScreen()
     data object Orders : AppScreen()
     data class PackageDetails(val orderId: String) : AppScreen()
     data class Booking(val pickup: String, val delivery: String, val packageType: String) : AppScreen()
@@ -52,11 +52,9 @@ sealed class AppScreen {
     data class SenderReceiver(val bookingId: String) : AppScreen()
     data class BookingPayment(val bookingId: String, val totalAmount: Int = 220) : AppScreen()
     data class PaymentSuccess(val bookingId: String, val amount: Int = 220) : AppScreen()
-    data class BookingConfirmed(val bookingId: String) : AppScreen()
     data object SelectAddress : AppScreen()
     data object Details : AppScreen()
     data object RequestForRide : AppScreen()
-    data object ThankYou : AppScreen()
 }
 
 @Composable
@@ -103,7 +101,8 @@ fun App() {
                     },
                     onNavigateToOrders = { currentScreen = AppScreen.Orders },
                     onNavigateToProfile = { currentScreen = AppScreen.Profile },
-                    onNavigateToTracking = { currentScreen = AppScreen.ActiveShipment }
+                    onNavigateToTracking = { currentScreen = AppScreen.ActiveShipment },
+                    onNavigateToHistory = { currentScreen = AppScreen.History }
                 )
             }
             is AppScreen.Profile -> {
@@ -138,18 +137,26 @@ fun App() {
             }
             is AppScreen.History -> {
                 HistoryScreen(
-                    onInstantDelivery = { currentScreen = AppScreen.Home },
-                    onScheduleDelivery = { currentScreen = AppScreen.Home },
+                    onInstantDelivery = { currentScreen = AppScreen.SelectAddress },
+                    onScheduleDelivery = { currentScreen = AppScreen.SelectAddress },
                     onOrderClick = { orderId -> currentScreen = AppScreen.DeliveryDetails(orderId) },
-                    onViewAll = { currentScreen = AppScreen.Orders }
+                    onViewAll = { currentScreen = AppScreen.Orders },
+                    onNavigateToHome = { currentScreen = AppScreen.Home },
+                    onNavigateToProfile = { currentScreen = AppScreen.Profile }
                 )
             }
             is AppScreen.TrackShipment -> {
                 TrackShipmentScreen(
                     onSearch = { },
-                    onViewDetails = { orderId -> 
-                        currentScreen = AppScreen.PackageDetails(orderId) 
-                    }
+                    onViewDetails = { _ ->
+                        currentScreen = AppScreen.TrackingLive
+                    },
+                    onNavigateToHistory = { currentScreen = AppScreen.History }
+                )
+            }
+            is AppScreen.TrackingLive -> {
+                TrackingLiveScreen(
+                    onBack = { currentScreen = AppScreen.TrackShipment }
                 )
             }
             is AppScreen.Orders -> {
@@ -196,16 +203,10 @@ fun App() {
             is AppScreen.PaymentSuccess -> {
                 PaymentSuccessScreen(
                     amount = screen.amount,
-                    onContinue = { currentScreen = AppScreen.ThankYou }
+                    onContinue = { currentScreen = AppScreen.ActiveShipment }
                 )
             }
-            is AppScreen.BookingConfirmed -> {
-                BookingConfirmedScreen(
-                    bookingId = screen.bookingId,
-                    onTrackOrder = { currentScreen = AppScreen.ActiveShipment },
-                    onGoHome = { currentScreen = AppScreen.Home }
-                )
-            }
+
             is AppScreen.DriverRating -> {
                 DriverRatingScreen(
                     driverName = screen.driverName,
@@ -220,8 +221,9 @@ fun App() {
             }
             is AppScreen.ActiveShipment -> {
                 ActiveShipmentScreen(
-                    onTrackShipments = { currentScreen = AppScreen.DeliveryDetails("560023") },
-                    onNavigateToHome = { currentScreen = AppScreen.Home }
+                    onTrackShipments = { currentScreen = AppScreen.TrackShipment },
+                    onNavigateToHome = { currentScreen = AppScreen.Home },
+                    onNavigateToHistory = { currentScreen = AppScreen.History }
                 )
             }
             is AppScreen.DeliveryDetails -> {
@@ -248,11 +250,6 @@ fun App() {
                 RequestForRideScreen(
                     onContinue = { currentScreen = AppScreen.PaymentSuccess("booking", 220) },
                     onBack = { currentScreen = AppScreen.Details }
-                )
-            }
-            is AppScreen.ThankYou -> {
-                ThankYouScreen(
-                    onViewOrder = { currentScreen = AppScreen.BookingConfirmed("booking") }
                 )
             }
         }

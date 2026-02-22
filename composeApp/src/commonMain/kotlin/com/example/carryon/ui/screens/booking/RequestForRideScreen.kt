@@ -1,5 +1,7 @@
 package com.example.carryon.ui.screens.booking
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -14,11 +16,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import carryon.composeapp.generated.resources.*
 import com.example.carryon.ui.theme.*
+import org.jetbrains.compose.resources.painterResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -29,6 +33,16 @@ fun RequestForRideScreen(
     var selectedPayment by remember { mutableStateOf("visa") }
 
     Scaffold(
+        bottomBar = {
+            Box(modifier = Modifier.fillMaxWidth().background(Color.White).padding(horizontal = 20.dp, vertical = 12.dp)) {
+                Button(
+                    onClick = onContinue,
+                    modifier = Modifier.fillMaxWidth().height(52.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = PrimaryBlue)
+                ) { Text("Continue", fontSize = 15.sp, fontWeight = FontWeight.SemiBold) }
+            }
+        },
         topBar = {
             TopAppBar(
                 title = {
@@ -43,41 +57,74 @@ fun RequestForRideScreen(
             )
         }
     ) { paddingValues ->
-        Column(modifier = Modifier.fillMaxSize().padding(paddingValues).verticalScroll(rememberScrollState()).padding(horizontal = 20.dp)) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 20.dp)
+        ) {
+            Spacer(modifier = Modifier.height(12.dp))
+
             // Back + Title
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text("<", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = PrimaryBlue, modifier = Modifier.clickable { onBack() }.padding(end = 8.dp))
+                Text(
+                    "<",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = PrimaryBlue,
+                    modifier = Modifier.clickable { onBack() }.padding(end = 8.dp)
+                )
                 Text("Request for Ride", fontSize = 18.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
             }
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
-            // Route Card
-            Card(modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp), colors = CardDefaults.cardColors(containerColor = Color.White), elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)) {
-                Column(modifier = Modifier.padding(16.dp)) {
-                    // From
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Box(modifier = Modifier.size(10.dp).clip(CircleShape).background(SuccessGreen))
-                        Spacer(modifier = Modifier.width(12.dp))
-                        Column {
-                            Text("Current Location", fontSize = 14.sp, fontWeight = FontWeight.Medium, color = TextPrimary)
-                            Text("32 Samwell Sq, Chevron", fontSize = 12.sp, color = TextSecondary)
-                        }
+            // Route section
+            Row(modifier = Modifier.fillMaxWidth()) {
+                // Left: icons + dotted line
+                Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.width(36.dp)) {
+                    // Red pin
+                    Box(
+                        modifier = Modifier.size(28.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Box(modifier = Modifier.size(14.dp).clip(CircleShape).background(Color(0xFFE53935)))
+                        Box(modifier = Modifier.size(6.dp).clip(CircleShape).background(Color.White))
                     }
                     // Dotted line
-                    Column(modifier = Modifier.padding(start = 4.dp)) {
-                        repeat(3) {
-                            Box(modifier = Modifier.width(2.dp).height(4.dp).background(Color.Gray))
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        repeat(5) {
+                            Box(modifier = Modifier.width(2.dp).height(5.dp).background(Color(0xFFB0BEC5)))
                             Spacer(modifier = Modifier.height(3.dp))
                         }
                     }
-                    // To
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Box(modifier = Modifier.size(10.dp).clip(CircleShape).background(Color.Red))
-                        Spacer(modifier = Modifier.width(12.dp))
-                        Column {
-                            Text("Office", fontSize = 14.sp, fontWeight = FontWeight.Medium, color = TextPrimary)
-                            Text("1, Emirates, Estate Rd, Chevron", fontSize = 12.sp, color = TextSecondary)
+                    // Green pin
+                    Box(
+                        modifier = Modifier.size(28.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Box(modifier = Modifier.size(14.dp).clip(CircleShape).background(Color(0xFF43A047)))
+                        Box(modifier = Modifier.size(6.dp).clip(CircleShape).background(Color.White))
+                    }
+                }
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                // Right: location labels
+                Column(modifier = Modifier.weight(1f)) {
+                    // Current location
+                    Column {
+                        Text("Current location", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
+                        Text("2972 Westheimer Rd. Santa Ana, Illinois 85486", fontSize = 12.sp, color = TextSecondary, lineHeight = 17.sp)
+                    }
+                    Spacer(modifier = Modifier.height(24.dp))
+                    // Office
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text("Office", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
+                            Text("1901 Thornridge Cir. Shiloh, Hawaii 81063", fontSize = 12.sp, color = TextSecondary, lineHeight = 17.sp)
                         }
+                        Text("1.1km", fontSize = 13.sp, fontWeight = FontWeight.Medium, color = TextSecondary)
                     }
                 }
             }
@@ -85,76 +132,83 @@ fun RequestForRideScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             // Car Card
-            Card(modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp), colors = CardDefaults.cardColors(containerColor = Color.White), elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)) {
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                        // Car image placeholder
-                        Box(modifier = Modifier.size(60.dp).clip(RoundedCornerShape(8.dp)).background(Color(0xFFF5F5F5)), contentAlignment = Alignment.Center) {
-                            Text("🚗", fontSize = 30.sp)
-                        }
-                        Spacer(modifier = Modifier.width(12.dp))
-                        Column(modifier = Modifier.weight(1f)) {
-                            Text("Mustang Shelby GT", fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Text("⭐", fontSize = 12.sp)
-                                Spacer(modifier = Modifier.width(4.dp))
-                                Text("4.9 (531 reviews)", fontSize = 12.sp, color = TextSecondary)
-                            }
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp),
+                colors = CardDefaults.cardColors(containerColor = Color(0xFFF6F9FA)),
+                border = BorderStroke(1.dp, Color(0xFFDCE8E9)),
+                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text("Mustang Shelby GT", fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text("⭐", fontSize = 13.sp)
+                            Spacer(modifier = Modifier.width(4.dp))
+                            Text("4.9 (531 reviews)", fontSize = 12.sp, color = TextSecondary)
                         }
                     }
+                    Image(
+                        painter = painterResource(Res.drawable.car_mustang),
+                        contentDescription = "Mustang Shelby GT",
+                        modifier = Modifier.width(110.dp).height(70.dp),
+                        contentScale = ContentScale.Fit
+                    )
                 }
             }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Charge
-            Card(modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp), colors = CardDefaults.cardColors(containerColor = Color.White), elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)) {
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Text("Charge", fontSize = 16.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                        Text("Amount", fontSize = 14.sp, color = TextSecondary)
-                        Text("$200.00", fontSize = 14.sp, fontWeight = FontWeight.Medium, color = TextPrimary)
-                    }
-                    Spacer(modifier = Modifier.height(6.dp))
-                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                        Text("Tax", fontSize = 14.sp, color = TextSecondary)
-                        Text("$20.00", fontSize = 14.sp, fontWeight = FontWeight.Medium, color = TextPrimary)
-                    }
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Divider(color = Color(0xFFEEEEEE))
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                        Text("Total", fontSize = 15.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
-                        Text("$220.00", fontSize = 15.sp, fontWeight = FontWeight.Bold, color = PrimaryBlue)
-                    }
-                }
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Payment Methods
-            Text("Payment Methods", fontSize = 16.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
-            Spacer(modifier = Modifier.height(10.dp))
-
-            // VISA
-            PaymentMethodRow(label = "VISA", subLabel = "****7890", isSelected = selectedPayment == "visa") { selectedPayment = "visa" }
-            Spacer(modifier = Modifier.height(8.dp))
-            PaymentMethodRow(label = "MasterCard", subLabel = "****3456", isSelected = selectedPayment == "mc") { selectedPayment = "mc" }
-            Spacer(modifier = Modifier.height(8.dp))
-            PaymentMethodRow(label = "PayPal", subLabel = "john@mail.com", isSelected = selectedPayment == "paypal") { selectedPayment = "paypal" }
-            Spacer(modifier = Modifier.height(8.dp))
-            PaymentMethodRow(label = "Cash", subLabel = "", isSelected = selectedPayment == "cash") { selectedPayment = "cash" }
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // Continue button
-            Button(
-                onClick = onContinue,
-                modifier = Modifier.fillMaxWidth().height(50.dp),
-                shape = RoundedCornerShape(12.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = PrimaryBlue)
-            ) { Text("Continue", fontSize = 15.sp, fontWeight = FontWeight.SemiBold) }
+            // Charge section
+            Text("Charge", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
+            Spacer(modifier = Modifier.height(10.dp))
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Text("Fair Price", fontSize = 14.sp, color = TextSecondary)
+                Text("\$200", fontSize = 14.sp, fontWeight = FontWeight.Medium, color = TextPrimary)
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Text("Tax (5%)", fontSize = 14.sp, color = TextSecondary)
+                Text("\$20", fontSize = 14.sp, fontWeight = FontWeight.Medium, color = TextPrimary)
+            }
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            // Select payment method
+            Text("Select payment method", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
+            Spacer(modifier = Modifier.height(12.dp))
+
+            PaymentMethodRow(
+                iconRes = Res.drawable.payment_visa,
+                title = "**** **** **** 8970",
+                subtitle = "Expires: 12/26",
+                isSelected = selectedPayment == "visa"
+            ) { selectedPayment = "visa" }
+            Spacer(modifier = Modifier.height(10.dp))
+            PaymentMethodRow(
+                iconRes = Res.drawable.payment_mc,
+                title = "**** **** **** 8970",
+                subtitle = "Expires: 12/26",
+                isSelected = selectedPayment == "mc"
+            ) { selectedPayment = "mc" }
+            Spacer(modifier = Modifier.height(10.dp))
+            PaymentMethodRow(
+                iconRes = Res.drawable.payment_paypal,
+                title = "mailaddress@mail.com",
+                subtitle = "Expires: 12/26",
+                isSelected = selectedPayment == "paypal"
+            ) { selectedPayment = "paypal" }
+            Spacer(modifier = Modifier.height(10.dp))
+            PaymentMethodRow(
+                iconRes = Res.drawable.payment_cash,
+                title = "Cash",
+                subtitle = "",
+                isSelected = selectedPayment == "cash"
+            ) { selectedPayment = "cash" }
 
             Spacer(modifier = Modifier.height(20.dp))
         }
@@ -162,23 +216,36 @@ fun RequestForRideScreen(
 }
 
 @Composable
-private fun PaymentMethodRow(label: String, subLabel: String, isSelected: Boolean, onClick: () -> Unit) {
+private fun PaymentMethodRow(
+    iconRes: org.jetbrains.compose.resources.DrawableResource,
+    title: String,
+    subtitle: String,
+    isSelected: Boolean,
+    onClick: () -> Unit
+) {
     Row(
-        modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(10.dp))
-            .background(if (isSelected) PrimaryBlueSurface else Color(0xFFF5F5F5))
-            .border(width = if (isSelected) 1.5.dp else 0.dp, color = if (isSelected) PrimaryBlue else Color.Transparent, shape = RoundedCornerShape(10.dp))
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(10.dp))
+            .background(Color.White)
+            .border(BorderStroke(1.dp, Color(0xFFDCE8E9)), RoundedCornerShape(10.dp))
             .clickable { onClick() }
-            .padding(horizontal = 16.dp, vertical = 14.dp),
+            .padding(horizontal = 14.dp, vertical = 14.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Radio dot
-        Box(modifier = Modifier.size(20.dp).clip(CircleShape).border(2.dp, if (isSelected) PrimaryBlue else Color.Gray, CircleShape), contentAlignment = Alignment.Center) {
-            if (isSelected) Box(modifier = Modifier.size(10.dp).clip(CircleShape).background(PrimaryBlue))
-        }
-        Spacer(modifier = Modifier.width(12.dp))
-        Text(label, fontSize = 14.sp, fontWeight = FontWeight.Medium, color = TextPrimary, modifier = Modifier.weight(1f))
-        if (subLabel.isNotEmpty()) {
-            Text(subLabel, fontSize = 13.sp, color = TextSecondary)
+        Image(
+            painter = painterResource(iconRes),
+            contentDescription = title,
+            modifier = Modifier.size(42.dp),
+            contentScale = ContentScale.Fit
+        )
+        Spacer(modifier = Modifier.width(14.dp))
+        Column(modifier = Modifier.weight(1f)) {
+            Text(title, fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
+            if (subtitle.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(2.dp))
+                Text(subtitle, fontSize = 12.sp, color = TextSecondary)
+            }
         }
     }
 }
